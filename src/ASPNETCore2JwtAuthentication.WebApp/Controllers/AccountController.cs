@@ -4,10 +4,10 @@ using ASPNETCore2JwtAuthentication.Common;
 using ASPNETCore2JwtAuthentication.DataLayer.Context;
 using ASPNETCore2JwtAuthentication.DomainClasses;
 using ASPNETCore2JwtAuthentication.Services;
+using ASPNETCore2JwtAuthentication.WebApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 
 namespace ASPNETCore2JwtAuthentication.WebApp.Controllers
 {
@@ -55,7 +55,7 @@ namespace ASPNETCore2JwtAuthentication.WebApp.Controllers
             }
 
             var user = await _usersService.FindUserAsync(loginUser.Username, loginUser.Password);
-            if (user == null || !user.IsActive)
+            if (user?.IsActive != true)
             {
                 return Unauthorized();
             }
@@ -70,10 +70,11 @@ namespace ASPNETCore2JwtAuthentication.WebApp.Controllers
         }
 
         [AllowAnonymous]
+        [IgnoreAntiforgeryToken]
         [HttpPost("[action]")]
-        public async Task<IActionResult> RefreshToken([FromBody]JToken jsonBody)
+        public async Task<IActionResult> RefreshToken([FromBody]Token model)
         {
-            var refreshTokenValue = jsonBody.Value<string>("refreshToken");
+            var refreshTokenValue = model.RefreshToken;
             if (string.IsNullOrWhiteSpace(refreshTokenValue))
             {
                 return BadRequest("refreshToken is not set.");

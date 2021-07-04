@@ -1,18 +1,18 @@
-Jwt Authentication without ASP.NET Core Identity 2.0
+Jwt Authentication without ASP.NET Core Identity 5.0.100
 ===========
 
 ![jwtauth](/src/ASPNETCore2JwtAuthentication.WebApp/wwwroot/images/jwtauth.png)
 
-A Jwt based authentication sample for ASP.NET Core 2.0 without using the Identity system. It includes:
+A Jwt based authentication sample for ASP.NET Core 5.0.100 without using the Identity system. It includes:
 
 - Users and Roles tables with a many-to-may relationship.
 - A separated EF Core data layer with enabled migrations.
-- An EF Core 2.0 based service layer.
+- An EF Core 5.0.100 based service layer.
 - A Db initializer to seed the default database values.
 - An account controller with Jwt and DB based login, custom logout and refresh tokens capabilities.
 - 2 sample API controllers to show how user-roles can be applied and used.
 - A Jwt validator service to show how to react to the server side changes to a user's info immediately.
-- [An Angular 6.0+ Client](/src/ASPNETCore2JwtAuthentication.AngularClient/). It contains:
+- [An Angular 7.0+ Client](/src/ASPNETCore2JwtAuthentication.AngularClient/). It contains:
   - A JWT-based Login page.
   - Handling how and where to store the tokens.
   - How to handle refresh tokens mechanism, using reactive timers.
@@ -25,7 +25,7 @@ A Jwt based authentication sample for ASP.NET Core 2.0 without using the Identit
 
 
 
-How to run the Angular 6.0+ Client
+How to run the Angular 7.0+ Client
 -------------
 
 - Update all of the outdated global dependencies using the `npm update -g` command.
@@ -34,6 +34,7 @@ How to run the Angular 6.0+ Client
 - Now run the following commands:
 
 ```PowerShell
+npm update -g
 npm install
 _2-ng-build-dev.bat
 ```
@@ -46,4 +47,4 @@ dotnet restore
 dotnet watch run
 ```
 
-- Finally to browse the application, navigate to http://localhost:5000/AngularClient
+- Finally to browse the application, navigate to https://localhost:5001/AngularClient

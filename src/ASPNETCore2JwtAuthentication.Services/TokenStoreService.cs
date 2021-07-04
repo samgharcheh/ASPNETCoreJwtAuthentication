@@ -82,10 +82,7 @@ namespace ASPNETCore2JwtAuthentication.Services
         {
             var now = DateTimeOffset.UtcNow;
             await _tokens.Where(x => x.RefreshTokenExpiresDateTime < now)
-                         .ForEachAsync(userToken =>
-                         {
-                             _tokens.Remove(userToken);
-                         });
+                        .ForEachAsync(userToken => _tokens.Remove(userToken));
         }
 
         public async Task DeleteTokenAsync(string refreshTokenValue)
@@ -103,11 +100,11 @@ namespace ASPNETCore2JwtAuthentication.Services
             {
                 return;
             }
-            await _tokens.Where(t => t.RefreshTokenIdHashSource == refreshTokenIdHashSource)
-                         .ForEachAsync(userToken =>
-                         {
-                             _tokens.Remove(userToken);
-                         });
+
+            await _tokens.Where(t => t.RefreshTokenIdHashSource == refreshTokenIdHashSource ||
+                                     t.RefreshTokenIdHash == refreshTokenIdHashSource &&
+                                      t.RefreshTokenIdHashSource == null)
+                .ForEachAsync(userToken => _tokens.Remove(userToken));
         }
 
         public async Task RevokeUserBearerTokensAsync(string userIdValue, string refreshTokenValue)
@@ -137,13 +134,13 @@ namespace ASPNETCore2JwtAuthentication.Services
         {
             if (string.IsNullOrWhiteSpace(refreshTokenValue))
             {
-                return null;
+                return Task.FromResult<UserToken>(null);
             }
 
             var refreshTokenSerial = _tokenFactoryService.GetRefreshTokenSerial(refreshTokenValue);
             if (string.IsNullOrWhiteSpace(refreshTokenSerial))
             {
-                return null;
+                return Task.FromResult<UserToken>(null);
             }
 
             var refreshTokenIdHash = _securityService.GetSha256Hash(refreshTokenSerial);
@@ -153,10 +150,7 @@ namespace ASPNETCore2JwtAuthentication.Services
         public async Task InvalidateUserTokensAsync(int userId)
         {
             await _tokens.Where(x => x.UserId == userId)
-                         .ForEachAsync(userToken =>
-                         {
-                             _tokens.Remove(userToken);
-                         });
+                        .ForEachAsync(userToken => _tokens.Remove(userToken));
         }
 
         public async Task<bool> IsValidTokenAsync(string accessToken, int userId)

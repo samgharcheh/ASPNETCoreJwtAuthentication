@@ -28,7 +28,8 @@ namespace ASPNETCore2JwtAuthentication.ConsoleClient
 
     class Program
     {
-        private static readonly string _baseAddress = "http://localhost:5000/";
+        private const string BaseAddress = "https://localhost:5001/";
+
         private static readonly HttpClientHandler _httpClientHandler = new HttpClientHandler
         {
             UseCookies = true,
@@ -37,7 +38,7 @@ namespace ASPNETCore2JwtAuthentication.ConsoleClient
         };
         private static readonly HttpClient _httpClient = new HttpClient(_httpClientHandler)
         {
-            BaseAddress = new Uri(_baseAddress)
+            BaseAddress = new Uri(BaseAddress)
         };
 
         public static async Task Main(string[] args)
@@ -53,7 +54,7 @@ namespace ASPNETCore2JwtAuthentication.ConsoleClient
         private static Dictionary<string, string> GetAntiforgeryCookies()
         {
             Console.WriteLine("\nGet Antiforgery Cookies:");
-            var cookies = _httpClientHandler.CookieContainer.GetCookies(new Uri(_baseAddress));
+            var cookies = _httpClientHandler.CookieContainer.GetCookies(new Uri(BaseAddress));
 
             var appCookies = new Dictionary<string, string>();
             Console.WriteLine("WebApp Cookies:");
@@ -70,9 +71,7 @@ namespace ASPNETCore2JwtAuthentication.ConsoleClient
         {
             Console.WriteLine("\nLogin:");
 
-            var response = await _httpClient.PostAsJsonAsync(
-                 requestUri,
-                 new User { Username = username, Password = password });
+            var response = await _httpClient.PostAsJsonAsync(requestUri, new User { Username = username, Password = password });
             response.EnsureSuccessStatusCode();
 
             var token = await response.Content.ReadAsAsync<Token>(new[] { new JsonMediaTypeFormatter() });
@@ -95,9 +94,7 @@ namespace ASPNETCore2JwtAuthentication.ConsoleClient
             }
             // this is necessary to populate the this.HttpContext.User object automatically
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
-            var response = await _httpClient.PostAsJsonAsync(
-                 requestUri,
-                 new { refreshToken = token.RefreshToken });
+            var response = await _httpClient.PostAsJsonAsync(requestUri, new { refreshToken = token.RefreshToken });
             response.EnsureSuccessStatusCode();
 
             var newToken = await response.Content.ReadAsAsync<Token>(new[] { new JsonMediaTypeFormatter() });

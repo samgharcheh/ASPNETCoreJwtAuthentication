@@ -1,10 +1,9 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ASPNETCore2JwtAuthentication.DataLayer.Migrations
 {
-    public partial class V2018_06_03_1216 : Migration
+    public partial class V2020_11_16_1040 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,9 +11,9 @@ namespace ASPNETCore2JwtAuthentication.DataLayer.Migrations
                 name: "Roles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(maxLength: 450, nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -25,14 +24,14 @@ namespace ASPNETCore2JwtAuthentication.DataLayer.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Username = table.Column<string>(maxLength: 450, nullable: false),
-                    Password = table.Column<string>(nullable: false),
-                    DisplayName = table.Column<string>(nullable: true),
-                    IsActive = table.Column<bool>(nullable: false),
-                    LastLoggedIn = table.Column<DateTimeOffset>(nullable: true),
-                    SerialNumber = table.Column<string>(maxLength: 450, nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Username = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    LastLoggedIn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    SerialNumber = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -43,8 +42,8 @@ namespace ASPNETCore2JwtAuthentication.DataLayer.Migrations
                 name: "UserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(nullable: false),
-                    RoleId = table.Column<int>(nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -67,14 +66,14 @@ namespace ASPNETCore2JwtAuthentication.DataLayer.Migrations
                 name: "UserTokens",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AccessTokenHash = table.Column<string>(nullable: true),
-                    AccessTokenExpiresDateTime = table.Column<DateTimeOffset>(nullable: false),
-                    RefreshTokenIdHash = table.Column<string>(maxLength: 450, nullable: false),
-                    RefreshTokenIdHashSource = table.Column<string>(maxLength: 450, nullable: true),
-                    RefreshTokenExpiresDateTime = table.Column<DateTimeOffset>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AccessTokenHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AccessTokenExpiresDateTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    RefreshTokenIdHash = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
+                    RefreshTokenIdHashSource = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: true),
+                    RefreshTokenExpiresDateTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
